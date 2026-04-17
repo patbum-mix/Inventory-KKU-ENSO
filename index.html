@@ -795,7 +795,8 @@ tr.selectable-row.selected { background: var(--primary-50); }
         </div>
       </div>
       <div class="header-actions">
-        <button class="header-btn" onclick="goToBranchSelect()">🔄 เปลี่ยนคลัง</button>
+        <button class="header-btn" onclick="manualRefresh()" title="อัพเดทข้อมูล">🔄 อัพเดท</button>
+        <button class="header-btn" onclick="goToBranchSelect()">🔀 เปลี่ยนคลัง</button>
         <button class="header-btn" onclick="handleLogout()">🚪 ออกจากระบบ</button>
       </div>
     </div>
@@ -815,8 +816,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
   <div class="content">
     <!-- Dashboard -->
     <div id="tab-content-dashboard" class="tab-content hidden">
-      <h2 class="page-title">📊 ภาพรวมระบบ</h2>
-      <p class="page-subtitle branch-label" data-base-text="สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ">สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title">📊 ภาพรวมระบบ</h2>
+          <p class="page-subtitle branch-label" data-base-text="สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ">สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="stat-grid" id="stat-grid">
         <div class="empty-state" style="grid-column:1/-1;"><span class="spinner"></span></div>
@@ -841,8 +847,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Withdraw -->
     <div id="tab-content-withdraw" class="tab-content hidden">
-      <h2 class="page-title branch-label" data-base-text="📤 เบิกพัสดุ">📤 เบิกพัสดุ</h2>
-      <p class="page-subtitle">เลือกพัสดุที่ต้องการเบิกออกจากคลัง</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title branch-label" data-base-text="📤 เบิกพัสดุ">📤 เบิกพัสดุ</h2>
+          <p class="page-subtitle">เลือกพัสดุที่ต้องการเบิกออกจากคลัง</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="card">
         <div class="grid-2">
@@ -923,8 +934,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Return -->
     <div id="tab-content-return" class="tab-content hidden">
-      <h2 class="page-title branch-label" data-base-text="📥 คืนพัสดุ">📥 คืนพัสดุ</h2>
-      <p class="page-subtitle">บันทึกการคืนพัสดุที่ยืมไป</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title branch-label" data-base-text="📥 คืนพัสดุ">📥 คืนพัสดุ</h2>
+          <p class="page-subtitle">บันทึกการคืนพัสดุที่ยืมไป</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="card">
         <div class="grid-2">
@@ -981,8 +997,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Inventory -->
     <div id="tab-content-inventory" class="tab-content hidden">
-      <h2 class="page-title branch-label" data-base-text="🏪 คลังพัสดุ">🏪 คลังพัสดุ</h2>
-      <p class="page-subtitle">รายการพัสดุทั้งหมดในคลัง</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title branch-label" data-base-text="🏪 คลังพัสดุ">🏪 คลังพัสดุ</h2>
+          <p class="page-subtitle">รายการพัสดุทั้งหมดในคลัง</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="card">
         <div class="filter-bar">
@@ -1020,8 +1041,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- History -->
     <div id="tab-content-history" class="tab-content hidden">
-      <h2 class="page-title">📋 ประวัติการเบิก-คืน</h2>
-      <p class="page-subtitle">บันทึกการทำรายการทั้งหมด</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title">📋 ประวัติการเบิก-คืน</h2>
+          <p class="page-subtitle">บันทึกการทำรายการทั้งหมด</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="card" style="margin-bottom:16px;">
         <div id="admin-section">
@@ -1097,8 +1123,13 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Manage Inventory (Admin only) -->
     <div id="tab-content-manage" class="tab-content hidden">
-      <h2 class="page-title branch-label" data-base-text="⚙️ จัดการคลังพัสดุ">⚙️ จัดการคลังพัสดุ</h2>
-      <p class="page-subtitle">เพิ่ม/แก้ไข/ลบรายการพัสดุ (สำหรับผู้ดูแลเท่านั้น)</p>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 class="page-title branch-label" data-base-text="⚙️ จัดการคลังพัสดุ">⚙️ จัดการคลังพัสดุ</h2>
+          <p class="page-subtitle">เพิ่ม/แก้ไข/ลบรายการพัสดุ (สำหรับผู้ดูแลเท่านั้น)</p>
+        </div>
+        <button onclick="refreshCurrentTab()" class="btn btn-secondary btn-sm">🔄 รีเฟรช</button>
+      </div>
 
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
@@ -1160,7 +1191,13 @@ const state = {
   currentWithdrawRecord: null,
   charts: {},
   pendingMainBranch: null,
+  lastRefreshedAt: 0,          // timestamp การ refresh ล่าสุด (สำหรับ auto-refresh)
 };
+
+// ==================== AUTO-REFRESH CONFIG ====================
+const AUTO_REFRESH_MS = 30000; // 30 วินาที
+let refreshTimer = null;
+let isRefreshing = false;
 
 const BRANCH_INFO = {
   general: { name: 'ศูนย์ส่งเสริมวิสาหกิจฯ', sub: 'พัสดุทั่วไป', icon: '🏢', prefix: 'W' },
@@ -1274,6 +1311,7 @@ async function apiPost(payload) {
 }
 
 function forceRelogin() {
+  stopAutoRefresh();
   state.isLoggedIn = false;
   state.isAdmin = false;
   state.authToken = null;
@@ -1350,6 +1388,7 @@ function handleLogout() {
     cancelButtonColor: '#64748b'
   }).then(result => {
     if (result.isConfirmed) {
+      stopAutoRefresh();
       state.isLoggedIn = false;
       state.isAdmin = false;
       state.authToken = null;
@@ -1452,6 +1491,8 @@ async function selectBranch(branch) {
     await loadAllData();
     Swal.close();
     switchTab('dashboard');
+    state.lastRefreshedAt = Date.now();
+    startAutoRefresh();   // ← เริ่ม auto-refresh ทุก 30 วินาที
   } catch (e) {
     Swal.close();
     showError('ไม่สามารถโหลดข้อมูลได้: ' + e.message);
@@ -1511,6 +1552,7 @@ function updateBranchTexts(branch) {
 }
 
 function goToBranchSelect() {
+  stopAutoRefresh();
   state.currentBranch = null;
   state.isAdmin = false;
   state.inventory = [];
@@ -1546,6 +1588,141 @@ function switchTab(tabName) {
 // ============================================================
 async function loadAllData() {
   await Promise.all([loadInventory(), loadHistory(), loadUsers()]);
+  state.lastRefreshedAt = Date.now();
+}
+
+// ============================================================
+// REFRESH SYSTEM
+// ============================================================
+async function refreshCurrentTab(silent = false) {
+  if (!state.isLoggedIn || !state.currentBranch) return;
+
+  if (!silent) showLoading('กำลังรีเฟรชข้อมูล...');
+
+  try {
+    const activeTabBtn = document.querySelector('.tab-btn.active');
+    const activeTab = activeTabBtn ? activeTabBtn.dataset.tab : 'dashboard';
+
+    // โหลดข้อมูลที่เกี่ยวข้องกับ tab ปัจจุบัน
+    if (activeTab === 'dashboard') {
+      await Promise.all([loadInventory(), loadHistory()]);
+      await renderDashboard();
+    } else if (activeTab === 'withdraw') {
+      await loadInventory();
+      pruneSelectedItems();
+      populateCategoryDropdowns();
+      if ($('withdraw-category').value) {
+        filterWithdrawInventory();
+      }
+      displaySelectedItems();
+    } else if (activeTab === 'return') {
+      await loadInventory();
+      // ถ้ามี record เปิดอยู่ reload เพิ่ม
+      if (state.currentWithdrawRecord) {
+        const r = await apiGet('getWithdrawRecord', { code: state.currentWithdrawRecord.code });
+        if (r.status === 'success' && r.data) {
+          state.currentWithdrawRecord = r.data;
+          displayReturnRecord();
+        }
+      }
+    } else if (activeTab === 'inventory') {
+      await loadInventory();
+      renderInventory();
+    } else if (activeTab === 'history') {
+      await loadHistory();
+      renderHistory();
+    } else if (activeTab === 'manage') {
+      if (state.isAdmin) {
+        await loadInventory();
+        renderManage();
+      }
+    }
+
+    state.lastRefreshedAt = Date.now();
+
+    if (!silent) {
+      Swal.close();
+      Swal.fire({
+        icon: 'success',
+        title: 'อัพเดทข้อมูลล่าสุดแล้ว',
+        timer: 1000,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+      });
+    }
+  } catch (e) {
+    if (!silent) {
+      Swal.close();
+      showError('ไม่สามารถรีเฟรชข้อมูลได้: ' + e.message);
+    }
+  }
+}
+
+// ลบ selectedItems ที่ไม่มีในคลังแล้ว หรือจำนวนเกินที่มี
+function pruneSelectedItems() {
+  const before = state.selectedItems.length;
+  state.selectedItems = state.selectedItems.filter(sel => {
+    const inv = state.inventory.find(i => String(i.id) === String(sel.id));
+    if (!inv) return false;  // หายจากคลังแล้ว
+    if (sel.withdrawQty > Number(inv.quantity)) {
+      sel.withdrawQty = Number(inv.quantity);
+      if (sel.withdrawQty <= 0) return false;
+    }
+    return true;
+  });
+  if (before !== state.selectedItems.length) {
+    // แจ้งเตือนแบบเงียบๆ
+    console.log('Pruned selectedItems:', before, '->', state.selectedItems.length);
+  }
+}
+
+// Auto-refresh เมื่อ tab กลับมา active (ถ้าห่างจากครั้งล่าสุดเกิน 30 วินาที)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && state.isLoggedIn && state.currentBranch) {
+    const elapsed = Date.now() - (state.lastRefreshedAt || 0);
+    if (elapsed > 30000) {
+      refreshCurrentTab(true);  // silent refresh
+    }
+  }
+});
+
+// ==================== AUTO-REFRESH TIMER ====================
+function startAutoRefresh() {
+  stopAutoRefresh();
+  refreshTimer = setInterval(async () => {
+    if (document.hidden) return;                       // ไม่ refresh ถ้า tab ไม่ active
+    if (!state.isLoggedIn || !state.currentBranch) return;
+    if (isRefreshing) return;                          // กันซ้ำ
+    // ไม่ refresh ขณะมี modal/dialog เปิดอยู่
+    if (Swal.isVisible()) return;
+    isRefreshing = true;
+    try {
+      await refreshCurrentTab(true);
+    } catch (e) {
+      console.warn('Auto-refresh error:', e);
+    } finally {
+      isRefreshing = false;
+    }
+  }, AUTO_REFRESH_MS);
+}
+
+function stopAutoRefresh() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
+}
+
+// ปุ่มกดรีเฟรชด้วยมือ (เรียกจาก onclick ใน HTML)
+async function manualRefresh() {
+  if (isRefreshing) return;
+  isRefreshing = true;
+  try {
+    await refreshCurrentTab(false);  // ไม่เงียบ — แสดง toast
+  } finally {
+    isRefreshing = false;
+  }
 }
 
 async function loadInventory() {
@@ -1991,8 +2168,7 @@ async function confirmWithdraw() {
       id: i.id, name: i.name, quantity: i.withdrawQty, unit: i.unit, purpose: i.purpose || ''
     })),
     status: 'รอดำเนินการ',
-    receiveStatus: 'ยังไม่ได้รับพัสดุ',
-    timestamp: new Date().toISOString()
+    receiveStatus: 'ยังไม่ได้รับพัสดุ'
   };
 
   showLoading('กำลังบันทึกข้อมูล...');
@@ -2162,8 +2338,7 @@ async function confirmReturn() {
       code: state.currentWithdrawRecord.code,
       returnName,
       returnDate: state.currentWithdrawRecord.returnDate,
-      items,
-      timestamp: new Date().toISOString()
+      items
     });
     if (res.status === 'success') {
       showSuccess('คืนพัสดุสำเร็จ!', 'รอ Admin ตรวจรับการคืน');
