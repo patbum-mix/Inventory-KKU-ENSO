@@ -1142,9 +1142,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
 // ============================================================
 // CONFIG - แก้ตรงนี้ตอนใช้งานจริง
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUNi93wy6ZxhmC9aIxNwhG5Fp1kOP62Nchyez6RwcOFcyZnN8e7dQhBz9xeGK2XbU/exec';
-const SYSTEM_LOGIN = { username: 'admin', password: '123456' };
-const ADMIN_PASSWORD = '072539';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMiRhOhP0S7a4FRVo85bSe9aqt021pe4gEDyikz5OXYzYZ7ita3G_suoHf4SHY_vw/exec';
 
 // ============================================================
 // STATE
@@ -1152,6 +1150,7 @@ const ADMIN_PASSWORD = '072539';
 const state = {
   isLoggedIn: false,
   isAdmin: false,
+  authToken: null,             // token จาก server หลัง login
   currentBranch: null,         // 'general' | 'audio' | 'factory'
   inventory: [],
   withdraws: [],
@@ -1160,7 +1159,7 @@ const state = {
   selectedItems: [],
   currentWithdrawRecord: null,
   charts: {},
-  pendingMainBranch: null,     // 'center' | 'factory' (during selection)
+  pendingMainBranch: null,
 };
 
 const BRANCH_INFO = {
@@ -1240,35 +1239,102 @@ function showWarning(message) {
 // API - เรียก Apps Script
 // ============================================================
 async function apiGet(action, extra = {}) {
-  const params = new URLSearchParams({ action, branch: state.currentBranch || 'general', _: Date.now(), ...extra });
+  const params = new URLSearchParams({
+    action,
+    branch: state.currentBranch || 'general',
+    token: state.authToken || '',
+    _: Date.now(),
+    ...extra
+  });
   const res = await fetch(`${SCRIPT_URL}?${params}`);
-  return await res.json();
+  const data = await res.json();
+  if (data && data.needLogin) {
+    forceRelogin();
+    throw new Error('Session expired');
+  }
+  return data;
 }
 
 async function apiPost(payload) {
   payload.branch = state.currentBranch || 'general';
+  if (payload.action !== 'login') {
+    payload.token = state.authToken || '';
+  }
   const res = await fetch(SCRIPT_URL, {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: { 'Content-Type': 'text/plain;charset=utf-8' }
   });
-  return await res.json();
+  const data = await res.json();
+  if (data && data.needLogin) {
+    forceRelogin();
+    throw new Error('Session expired');
+  }
+  return data;
+}
+
+function forceRelogin() {
+  state.isLoggedIn = false;
+  state.isAdmin = false;
+  state.authToken = null;
+  state.currentBranch = null;
+  state.inventory = [];
+  state.withdraws = [];
+  state.returns = [];
+  state.users = [];
+  state.selectedItems = [];
+  state.currentWithdrawRecord = null;
+  clearAllViews();
+  $('tab-manage').classList.add('hidden');
+  show('admin-login-form');
+  hide('admin-logged-in');
+  hide('page-main');
+  hide('page-branch');
+  show('page-login');
+  $('login-password').value = '';
+  Swal.fire({
+    icon: 'warning',
+    title: 'เซสชันหมดอายุ',
+    text: 'กรุณาเข้าสู่ระบบใหม่อีกครั้ง',
+    confirmButtonColor: '#0284c7'
+  });
 }
 
 // ============================================================
 // LOGIN / LOGOUT / BRANCH
 // ============================================================
-function handleLogin() {
+async function handleLogin() {
   const username = $('login-username').value.trim();
   const password = $('login-password').value.trim();
 
-  if (username === SYSTEM_LOGIN.username && password === SYSTEM_LOGIN.password) {
-    state.isLoggedIn = true;
-    hide('page-login');
-    show('page-branch');
-    showSuccess('เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับ');
-  } else {
-    showError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+  if (!username || !password) {
+    showWarning('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+    return;
+  }
+
+  showLoading('กำลังตรวจสอบ...');
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'login', username, password }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    const data = await res.json();
+    Swal.close();
+
+    if (data.status === 'success') {
+      state.authToken = data.token;
+      state.isLoggedIn = true;
+      hide('page-login');
+      show('page-branch');
+      $('login-password').value = '';
+      showSuccess('เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับ');
+    } else {
+      showError(data.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+    }
+  } catch (e) {
+    Swal.close();
+    showError('ไม่สามารถเชื่อมต่อระบบได้ กรุณาตรวจสอบ SCRIPT_URL');
   }
 }
 
@@ -1286,6 +1352,7 @@ function handleLogout() {
     if (result.isConfirmed) {
       state.isLoggedIn = false;
       state.isAdmin = false;
+      state.authToken = null;
       state.currentBranch = null;
       state.inventory = [];
       state.withdraws = [];
@@ -2227,22 +2294,45 @@ function renderHistory() {
 // ============================================================
 // ADMIN ACTIONS
 // ============================================================
-function adminLogin() {
+async function adminLogin() {
   const pw = $('admin-password').value;
-  if (pw === ADMIN_PASSWORD) {
-    state.isAdmin = true;
-    hide('admin-login-form');
-    show('admin-logged-in');
-    $('tab-manage').classList.remove('hidden');
-    renderHistory();
-    showSuccess('เข้าสู่ระบบผู้ดูแลแล้ว');
-  } else {
-    showError('รหัสผ่านไม่ถูกต้อง');
+  if (!pw) {
+    showWarning('กรุณากรอกรหัสผ่าน');
+    return;
+  }
+  showLoading('กำลังตรวจสอบ...');
+  try {
+    const res = await apiPost({ action: 'verifyAdmin', password: pw });
+    Swal.close();
+    if (res.status === 'success') {
+      state.authToken = res.token;  // upgrade เป็น admin token
+      state.isAdmin = true;
+      hide('admin-login-form');
+      show('admin-logged-in');
+      $('tab-manage').classList.remove('hidden');
+      renderHistory();
+      showSuccess('เข้าสู่ระบบผู้ดูแลแล้ว');
+    } else {
+      showError(res.message || 'รหัสผ่านไม่ถูกต้อง');
+    }
+  } catch (e) {
+    Swal.close();
+    showError('ไม่สามารถเชื่อมต่อระบบได้');
   }
   $('admin-password').value = '';
 }
 
-function adminLogout() {
+async function adminLogout() {
+  showLoading('กำลังออกจากสิทธิ์ผู้ดูแล...');
+  try {
+    const res = await apiPost({ action: 'adminDowngrade' });
+    Swal.close();
+    if (res.status === 'success' && res.token) {
+      state.authToken = res.token;  // downgrade เป็น user token
+    }
+  } catch (e) {
+    Swal.close();
+  }
   state.isAdmin = false;
   show('admin-login-form');
   hide('admin-logged-in');
