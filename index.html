@@ -804,9 +804,9 @@ tr.selectable-row.selected { background: var(--primary-50); }
   <div class="tabs-bar">
     <div class="tabs-inner">
       <button class="tab-btn" data-tab="dashboard" onclick="switchTab('dashboard')">📊 ภาพรวม</button>
-      <button class="tab-btn" data-tab="withdraw" onclick="switchTab('withdraw')">📤 เบิกพัสดุ</button>
-      <button class="tab-btn" data-tab="return" onclick="switchTab('return')">📥 คืนพัสดุ</button>
-      <button class="tab-btn" data-tab="inventory" onclick="switchTab('inventory')">🏪 คลังพัสดุ</button>
+      <button class="tab-btn branch-label" data-base-text="📤 เบิกพัสดุ" data-tab="withdraw" onclick="switchTab('withdraw')">📤 เบิกพัสดุ</button>
+      <button class="tab-btn branch-label" data-base-text="📥 คืนพัสดุ" data-tab="return" onclick="switchTab('return')">📥 คืนพัสดุ</button>
+      <button class="tab-btn branch-label" data-base-text="🏪 คลังพัสดุ" data-tab="inventory" onclick="switchTab('inventory')">🏪 คลังพัสดุ</button>
       <button class="tab-btn" data-tab="history" onclick="switchTab('history')">📋 ประวัติ</button>
       <button class="tab-btn hidden" data-tab="manage" id="tab-manage" onclick="switchTab('manage')">⚙️ จัดการคลัง</button>
     </div>
@@ -816,7 +816,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
     <!-- Dashboard -->
     <div id="tab-content-dashboard" class="tab-content hidden">
       <h2 class="page-title">📊 ภาพรวมระบบ</h2>
-      <p class="page-subtitle">สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ</p>
+      <p class="page-subtitle branch-label" data-base-text="สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ">สรุปข้อมูลและสถิติการใช้งานคลังพัสดุ</p>
 
       <div class="stat-grid" id="stat-grid">
         <div class="empty-state" style="grid-column:1/-1;"><span class="spinner"></span></div>
@@ -841,7 +841,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Withdraw -->
     <div id="tab-content-withdraw" class="tab-content hidden">
-      <h2 class="page-title">📤 เบิกพัสดุ</h2>
+      <h2 class="page-title branch-label" data-base-text="📤 เบิกพัสดุ">📤 เบิกพัสดุ</h2>
       <p class="page-subtitle">เลือกพัสดุที่ต้องการเบิกออกจากคลัง</p>
 
       <div class="card">
@@ -860,11 +860,11 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
         <div class="grid-2" style="margin-top:16px;">
           <div>
-            <label class="label">📅 วันที่เบิกพัสดุ</label>
+            <label class="label branch-label" data-base-text="📅 วันที่เบิกพัสดุ">📅 วันที่เบิกพัสดุ</label>
             <input type="date" id="withdraw-receive-date" class="input" onchange="updateReturnDateMin()">
           </div>
           <div>
-            <label class="label">📅 วันที่ต้องคืนพัสดุ</label>
+            <label class="label branch-label" data-base-text="📅 วันที่ต้องคืนพัสดุ">📅 วันที่ต้องคืนพัสดุ</label>
             <input type="date" id="withdraw-return-date" class="input">
           </div>
         </div>
@@ -916,16 +916,14 @@ tr.selectable-row.selected { background: var(--primary-50); }
               <tbody id="withdraw-selected-tbody"></tbody>
             </table>
           </div>
-          <button onclick="confirmWithdraw()" class="btn btn-primary btn-lg btn-block" style="margin-top:20px;">
-            ✅ ยืนยันการเบิกพัสดุ
-          </button>
+          <button onclick="confirmWithdraw()" class="btn btn-primary btn-lg btn-block branch-label" data-base-text="✅ ยืนยันการเบิกพัสดุ" style="margin-top:20px;">✅ ยืนยันการเบิกพัสดุ</button>
         </div>
       </div>
     </div>
 
     <!-- Return -->
     <div id="tab-content-return" class="tab-content hidden">
-      <h2 class="page-title">📥 คืนพัสดุ</h2>
+      <h2 class="page-title branch-label" data-base-text="📥 คืนพัสดุ">📥 คืนพัสดุ</h2>
       <p class="page-subtitle">บันทึกการคืนพัสดุที่ยืมไป</p>
 
       <div class="card">
@@ -943,7 +941,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
         </div>
 
         <div style="margin-top:16px;">
-          <label class="label">🔢 รหัสเบิกพัสดุ</label>
+          <label class="label branch-label" data-base-text="🔢 รหัสเบิกพัสดุ">🔢 รหัสเบิกพัสดุ</label>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <input type="text" id="return-code" class="input" placeholder="กรอกรหัสเบิก เช่น W1234567890" style="flex:1; min-width:200px;">
             <button onclick="loadWithdrawRecord()" class="btn btn-primary">🔍 ตรวจสอบ</button>
@@ -976,16 +974,14 @@ tr.selectable-row.selected { background: var(--primary-50); }
             </table>
           </div>
 
-          <button onclick="confirmReturn()" class="btn btn-warning btn-lg btn-block" style="margin-top:20px;">
-            ✅ ยืนยันการคืนพัสดุ
-          </button>
+          <button onclick="confirmReturn()" class="btn btn-warning btn-lg btn-block branch-label" data-base-text="✅ ยืนยันการคืนพัสดุ" style="margin-top:20px;">✅ ยืนยันการคืนพัสดุ</button>
         </div>
       </div>
     </div>
 
     <!-- Inventory -->
     <div id="tab-content-inventory" class="tab-content hidden">
-      <h2 class="page-title">🏪 คลังพัสดุ</h2>
+      <h2 class="page-title branch-label" data-base-text="🏪 คลังพัสดุ">🏪 คลังพัสดุ</h2>
       <p class="page-subtitle">รายการพัสดุทั้งหมดในคลัง</p>
 
       <div class="card">
@@ -1101,7 +1097,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
 
     <!-- Manage Inventory (Admin only) -->
     <div id="tab-content-manage" class="tab-content hidden">
-      <h2 class="page-title">⚙️ จัดการคลังพัสดุ</h2>
+      <h2 class="page-title branch-label" data-base-text="⚙️ จัดการคลังพัสดุ">⚙️ จัดการคลังพัสดุ</h2>
       <p class="page-subtitle">เพิ่ม/แก้ไข/ลบรายการพัสดุ (สำหรับผู้ดูแลเท่านั้น)</p>
 
       <div class="card">
@@ -1146,7 +1142,7 @@ tr.selectable-row.selected { background: var(--primary-50); }
 // ============================================================
 // CONFIG - แก้ตรงนี้ตอนใช้งานจริง
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUNi93wy6ZxhmC9aIxNwhG5Fp1kOP62Nchyez6RwcOFcyZnN8e7dQhBz9xeGK2XbU/exec';
+const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
 const SYSTEM_LOGIN = { username: 'admin', password: '123456' };
 const ADMIN_PASSWORD = '072539';
 
@@ -1291,11 +1287,23 @@ function handleLogout() {
       state.isLoggedIn = false;
       state.isAdmin = false;
       state.currentBranch = null;
+      state.inventory = [];
+      state.withdraws = [];
+      state.returns = [];
+      state.users = [];
+      state.selectedItems = [];
+      state.currentWithdrawRecord = null;
+      clearAllViews();
+      // ซ่อน admin features
+      $('tab-manage').classList.add('hidden');
+      show('admin-login-form');
+      hide('admin-logged-in');
       hide('page-main');
       hide('page-branch');
       show('page-login');
       $('login-username').value = '';
       $('login-password').value = '';
+      $('login-username').focus();
     }
   });
 }
@@ -1323,26 +1331,128 @@ function enterBranch() {
   selectBranch(sub);
 }
 
-function selectBranch(branch) {
+async function selectBranch(branch) {
+  // ตั้งค่า branch ใหม่
   state.currentBranch = branch;
   state.isAdmin = false;
+
+  // ล้างข้อมูลเก่าทั้งหมด (bug fix: ข้ามคลังแล้วข้อมูลเก่ายังโชว์)
+  state.inventory = [];
+  state.withdraws = [];
+  state.returns = [];
+  state.users = [];
+  state.selectedItems = [];
+  state.currentWithdrawRecord = null;
+
+  // ล้างหน้าจอทั้งหมด
+  clearAllViews();
+
+  // ซ่อน admin features + ล้างรหัสผ่าน
+  $('tab-manage').classList.add('hidden');
+  show('admin-login-form');
+  hide('admin-logged-in');
+  const admPw = $('admin-password'); if (admPw) admPw.value = '';
+
+  // ล้างฟอร์มทุกอัน
+  ['withdraw-name', 'withdraw-name-other', 'withdraw-category', 'withdraw-search',
+   'withdraw-receive-date', 'withdraw-return-date',
+   'return-name', 'return-name-other', 'return-code',
+   'inventory-category', 'inventory-search',
+   'manage-category', 'manage-search'].forEach(id => {
+    const el = $(id); if (el) el.value = '';
+  });
+  hide('withdraw-name-other-wrap');
+  hide('return-name-other-wrap');
+
+  // อัพเดท header
   const info = BRANCH_INFO[branch];
   $('branch-logo').textContent = info.icon;
   $('branch-title').textContent = info.name;
   $('branch-subtitle').textContent = info.sub;
 
+  // อัพเดทข้อความเฉพาะ branch (เติม "โสต" เมื่อเข้าคลังโสต)
+  updateBranchTexts(branch);
+
+  // เปลี่ยนหน้า
   hide('page-branch');
   hide('sub-branch-section');
   $('sub-branch-select').value = '';
   show('page-main');
 
-  switchTab('dashboard');
-  loadAllData();
+  // โหลดข้อมูลให้เสร็จ แล้วค่อยไปแสดง dashboard
+  showLoading('กำลังโหลดข้อมูลคลัง ' + info.sub + '...');
+  try {
+    await loadAllData();
+    Swal.close();
+    switchTab('dashboard');
+  } catch (e) {
+    Swal.close();
+    showError('ไม่สามารถโหลดข้อมูลได้: ' + e.message);
+  }
+}
+
+function clearAllViews() {
+  // ใส่ spinner ใน stat grid
+  const sg = $('stat-grid');
+  if (sg) sg.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><span class="spinner"></span></div>';
+
+  // ล้าง tbody ทั้งหมด
+  ['inventory-tbody', 'withdraw-inventory-tbody', 'withdraw-selected-tbody',
+   'return-items-tbody', 'history-withdraw-tbody', 'history-return-tbody',
+   'manage-tbody'].forEach(id => {
+    const el = $(id); if (el) el.innerHTML = '';
+  });
+
+  // ทำลาย chart เก่า
+  Object.values(state.charts).forEach(chart => {
+    try { if (chart && typeof chart.destroy === 'function') chart.destroy(); } catch (e) {}
+  });
+  state.charts = {};
+
+  // ซ่อน section ต่างๆ
+  ['withdraw-inventory-section', 'withdraw-selected-section',
+   'withdraw-search-wrap', 'return-record-section'].forEach(id => hide(id));
+
+  // ล้าง count
+  const ic = $('inventory-count'); if (ic) ic.textContent = '';
+  const mc = $('manage-count'); if (mc) mc.textContent = '';
+
+  // ล้าง dropdown ที่เคย populate
+  ['inventory-category', 'withdraw-category', 'manage-category'].forEach(id => {
+    const el = $(id);
+    if (el) {
+      const isWithdraw = id === 'withdraw-category';
+      el.innerHTML = '<option value="">📂 ' + (isWithdraw ? 'เลือกหมวดหมู่' : 'ทุกหมวดหมู่') + '</option>';
+    }
+  });
+  ['withdraw-name', 'return-name'].forEach(id => {
+    const el = $(id);
+    if (el) {
+      const isReturn = id === 'return-name';
+      el.innerHTML = '<option value="">' + (isReturn ? 'เลือกชื่อผู้คืน' : 'เลือกชื่อผู้เบิก') + '</option>';
+    }
+  });
+}
+
+function updateBranchTexts(branch) {
+  const suffix = branch === 'audio' ? 'โสต' : '';
+  document.querySelectorAll('.branch-label').forEach(el => {
+    const base = el.dataset.baseText || el.textContent;
+    if (!el.dataset.baseText) el.dataset.baseText = el.textContent;
+    el.textContent = base + suffix;
+  });
 }
 
 function goToBranchSelect() {
   state.currentBranch = null;
   state.isAdmin = false;
+  state.inventory = [];
+  state.withdraws = [];
+  state.returns = [];
+  state.users = [];
+  state.selectedItems = [];
+  state.currentWithdrawRecord = null;
+  clearAllViews();
   hide('page-main');
   show('page-branch');
 }
@@ -1368,12 +1478,7 @@ function switchTab(tabName) {
 // DATA LOADING
 // ============================================================
 async function loadAllData() {
-  try {
-    await Promise.all([loadInventory(), loadHistory(), loadUsers()]);
-    renderDashboard();
-  } catch (e) {
-    showError('ไม่สามารถโหลดข้อมูลได้: ' + e.message);
-  }
+  await Promise.all([loadInventory(), loadHistory(), loadUsers()]);
 }
 
 async function loadInventory() {
